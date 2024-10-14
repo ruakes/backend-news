@@ -1,11 +1,13 @@
 const express = require('express');
-const { getAllTopics } = require('./controllers/endpoints.controller');
+const { getAllTopics, getEndpoints } = require('./controllers/endpoints.controller');
 const app = express();
-const endpoints = require("./endpoints.json")
+
 
 app.use(express.json());
 
 app.get('/api/topics', getAllTopics);
+
+app.get('/api', getEndpoints)
 
 app.all('*', (req, res, next) => {
     res.status(404).send({msg: 'path not found'})
