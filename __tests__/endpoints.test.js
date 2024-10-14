@@ -61,3 +61,25 @@ describe("GET '/api' ", () => {
         })
     })
 })
+
+describe("'/api/articles' endpoint", () => {
+    describe("GET all data from '/api/articles/:article_id' endpoint", () => {
+        test("GET /api/articles/:article_id returns 200", () => {
+            return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({body}) => {
+                expect(body.article).toMatchObject({
+                    article_id: expect.any(Number),
+                    title:  expect.any(String),
+                    topic: expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String)
+                })
+            })
+        })
+    })
+})
