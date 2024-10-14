@@ -11,9 +11,9 @@ afterAll(() => {
     return db.end()
  })
 
- describe.only("'/api/topics' endpoint", () => {
-    describe("GET all data from 'api/topics' endpoint", () => {
-        test("GET api/topics returns 200", () => {
+ describe("'/api/topics' endpoint", () => {
+    describe("GET all data from '/api/topics' endpoint", () => {
+        test("GET /api/topics returns 200", () => {
             return request(app)
             .get('/api/topics')
             .expect(200)
@@ -25,6 +25,8 @@ afterAll(() => {
                 expect(body.topics.length).toBe(3)
             })
         })
+    })
+    describe("test for invalid paths", () => {
         test("* returns 404 not found for invalid url", () => {
             return request(app)
             .get('/api/topicssss')
