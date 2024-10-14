@@ -1,8 +1,9 @@
-# Northcoders News API
+# Backend News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
-
-
+## Initial Setup
+1. Create two .env files for your project: .env.test and .env.development. 
+2. Inside each .env file, add PGDATABASE=<databaseName>, for the relevant environment. These can be found under /db/setup.sql  
+3. Double check that the created .env files are .gitignored.
 
 --- 
 
