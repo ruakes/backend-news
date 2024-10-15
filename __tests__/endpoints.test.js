@@ -81,5 +81,13 @@ describe("'/api/articles' endpoint", () => {
                 })
             })
         })
+        test("GET /api/articles/:article_id returns 404 if not found", () => {
+            return request(app)
+            .get('/api/articles/101')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe('Article not found')
+            })
+        })
     })
 })
