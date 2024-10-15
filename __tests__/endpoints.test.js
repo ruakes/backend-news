@@ -95,6 +95,7 @@ describe("'/api/articles' endpoint", () => {
             .expect(400)
             .then(({body}) => {
                 expect(body.msg).toBe('Article ID submitted is invalid datatype')
+                expect(body.msg).toBe('Article ID submitted is invalid datatype')
             })
         })
     })
@@ -131,8 +132,51 @@ describe("'/api/articles' endpoint", () => {
         })
     })
     describe("GET all comments for a specific article from '/api/articles/:article_id/comments' endpoint", () => {
-        test("", () => {
-
+        test("GET correct length array with comments listed in descending time order. Comments should be objects with certain properties", () => {
+            return request(app)
+            .get('/api/articles/9/comments')
+            .expect(200)
+            .then(({body}) => {
+                expect(Array.isArray(body.comments)).toBe(true)
+                expect(body.comments).toHaveLength(2)
+                body.comments.forEach(comment => {
+                    expect(comment).toMatchObject({
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        article_id: expect.any(Number),
+                        body: expect.any(String),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                    });
+                });
+                expect(body.comments[0].comment_id).toBe(1)
+                expect(body.comments[1].comment_id).toBe(17)
+            })
+        })
+        test("GET request to article with no comments returns 200 and empty array", () => {
+            return request(app)
+            .get('/api/articles/8/comments')
+            .expect(200)
+            .then(({body}) => {
+                expect(Array.isArray(body.comments)).toBe(true)
+                expect(body.comments).toHaveLength(0)
+            })
+        })
+        test("GET request to non-valid article_id returns 400 and message string detailing the error", () => {
+            return request(app)
+            .get('/api/articles/ruairi/comments')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Article ID submitted is invalid datatype')
+            })
+        })
+        test("GET /api/articles/:article_id/comments returns 404 if not found", () => {
+            return request(app)
+            .get('/api/articles/101/comments')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe('Article not found')
+            })
         })
     })
 })
