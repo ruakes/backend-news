@@ -90,7 +90,7 @@ describe("'/api/articles' endpoint", () => {
             })
         })
     })
-    describe.only("GET all data from '/api/articles' endpoint", () => {
+    describe("GET all data from '/api/articles' endpoint", () => {
         test("GET /api/articles returns an array with a length of 13", () => {
             return request(app)
             .get('/api/articles')
