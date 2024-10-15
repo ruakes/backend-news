@@ -90,4 +90,52 @@ describe("'/api/articles' endpoint", () => {
             })
         })
     })
+    describe.only("GET all data from '/api/articles' endpoint", () => {
+        test("GET /api/articles returns an array with a length of 13", () => {
+            return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles).toHaveLength(13)
+            })
+        })
+        test("GET /api/articles returns an array of objects which do not have a 'body' property", () => {
+            return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body}) => {
+                body.articles.forEach(article => {
+                    expect(Object.keys(article)).not.toContain('body')
+                });
+            })
+        })
+        test("GET /api/articles returns an array of objects which contain specific properties", () => {
+            return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body}) => {
+                body.articles.forEach(article => {
+                    expect(article).toMatchObject({
+                        author: expect.any(String),
+                        title: expect.any(String),
+                        article_id: expect.any(Number),
+                        topic: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        article_img_url: expect.any(String),
+                        comment_count: expect.any(Number)
+                    })
+                });
+            })
+        })
+        test("GET /api/articles returns an array of objects in descending date order i.e. most recent first", () => {
+            return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then(({body}) => {
+                expect(body.articles[0].article_id).toBe(3)
+                expect(body.articles[12].article_id).toBe(7)
+            })
+        })
+    })
 })
