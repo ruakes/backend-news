@@ -89,40 +89,24 @@ describe("'/api/articles' endpoint", () => {
                 expect(body.msg).toBe('Article not found')
             })
         })
-        test("GET /api/articles/:article_id returns 400 if NaN passed as an ID", () => {
+        test("GET /api/articles/:article_id returns 400 if invalid datatype passed as an ID", () => {
             return request(app)
             .get('/api/articles/ruairi')
             .expect(400)
             .then(({body}) => {
-                expect(body.msg).toBe('Article ID submitted is Not-a-Number (NaN)')
+                expect(body.msg).toBe('Article ID submitted is invalid datatype')
             })
         })
     })
     describe("GET all data from '/api/articles' endpoint", () => {
-        test("GET /api/articles returns an array with a length of 13", () => {
+        test("GET /api/articles returns an array of objecys with a length of 13, each object contains specific properties, excluding 'body'", () => {
             return request(app)
             .get('/api/articles')
             .expect(200)
             .then(({body}) => {
-                expect(body.articles).toHaveLength(13)
-            })
-        })
-        test("GET /api/articles returns an array of objects which do not have a 'body' property", () => {
-            return request(app)
-            .get('/api/articles')
-            .expect(200)
-            .then(({body}) => {
+                expect(body.articles).toHaveLength(13);
                 body.articles.forEach(article => {
-                    expect(Object.keys(article)).not.toContain('body')
-                });
-            })
-        })
-        test("GET /api/articles returns an array of objects which contain specific properties", () => {
-            return request(app)
-            .get('/api/articles')
-            .expect(200)
-            .then(({body}) => {
-                body.articles.forEach(article => {
+                    expect(Object.keys(article)).not.toContain('body');
                     expect(article).toMatchObject({
                         author: expect.any(String),
                         title: expect.any(String),
@@ -132,7 +116,7 @@ describe("'/api/articles' endpoint", () => {
                         votes: expect.any(Number),
                         article_img_url: expect.any(String),
                         comment_count: expect.any(Number)
-                    })
+                    });
                 });
             })
         })
@@ -144,6 +128,11 @@ describe("'/api/articles' endpoint", () => {
                 expect(body.articles[0].article_id).toBe(3)
                 expect(body.articles[12].article_id).toBe(7)
             })
+        })
+    })
+    describe("GET all comments for a specific article from '/api/articles/:article_id/comments' endpoint", () => {
+        test("", () => {
+
         })
     })
 })
