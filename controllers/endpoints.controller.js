@@ -25,7 +25,7 @@ exports.getArticlesById = (req, res, next) => {
     })
     .catch((err) => {
         if(err.code === '22P02'){
-            res.status(400).send({msg: 'Article ID submitted is Not-a-Number (NaN)'})
+            res.status(400).send({msg: 'Article ID submitted is invalid datatype'})
         }
         next(err)
     })
