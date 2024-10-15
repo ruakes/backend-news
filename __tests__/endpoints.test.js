@@ -89,6 +89,14 @@ describe("'/api/articles' endpoint", () => {
                 expect(body.msg).toBe('Article not found')
             })
         })
+        test("GET /api/articles/:article_id returns 400 if NaN passed as an ID", () => {
+            return request(app)
+            .get('/api/articles/ruairi')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('Article ID submitted is Not-a-Number (NaN)')
+            })
+        })
     })
     describe("GET all data from '/api/articles' endpoint", () => {
         test("GET /api/articles returns an array with a length of 13", () => {
