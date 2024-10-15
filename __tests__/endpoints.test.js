@@ -95,6 +95,7 @@ describe("'/api/articles' endpoint", () => {
             .expect(400)
             .then(({body}) => {
                 expect(body.msg).toBe('Article ID submitted is invalid datatype')
+                expect(body.msg).toBe('Article ID submitted is invalid datatype')
             })
         })
     })
@@ -104,7 +105,6 @@ describe("'/api/articles' endpoint", () => {
             .get('/api/articles')
             .expect(200)
             .then(({body}) => {
-                expect(Array.isArray(body.articles)).toBe(true)
                 expect(body.articles).toHaveLength(13);
                 body.articles.forEach(article => {
                     expect(Object.keys(article)).not.toContain('body');
