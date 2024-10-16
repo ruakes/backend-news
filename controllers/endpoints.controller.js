@@ -1,6 +1,6 @@
 const topics = require('../db/data/test-data/topics.js')
 
-const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle, insertNewComment, updateArticleVotes, removeExistingComment } = require('../models/endpoints.model.js')
+const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle, insertNewComment, updateArticleVotes, removeExistingComment, selectAllUsers } = require('../models/endpoints.model.js')
 const endpoints = require("../endpoints.json")
 
 exports.getAllTopics = (req, res, next) => {
@@ -103,6 +103,16 @@ exports.deleteCommentById = (req, res, next) => {
         res.status(204).send()
     })
     .catch((err) => {
+        next(err)
+    })
+}
+
+exports.getAllUsers = (req, res, next) => {
+    selectAllUsers()
+    .then((users) => {
+        res.status(200).send({users})
+    })
+    .catch(err=>{
         next(err)
     })
 }

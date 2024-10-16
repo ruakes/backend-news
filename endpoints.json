@@ -63,9 +63,9 @@
     "exampleResponse": {
       "addedComment": {
         "comment_id": 19,
-        "body": "What a fantastic insight!",
+        "body": "Great comment here",
         "article_id": 9,
-        "author": "lurker",
+        "author": "user1",
         "votes": 0,
         "created_at": "2024-10-16T11:01:46.220Z"
       }
@@ -77,18 +77,35 @@
     "exampleResponse": {
       "article": {
         "article_id": 1,
-        "title": "Living in the shadow of a great man",
-        "topic": "mitch",
-        "author": "butter_bridge",
-        "body": "I find this existence challenging",
+        "title": "Living in my shadow",
+        "topic": "the sun",
+        "author": "douser",
+        "body": "I find the sunshine challenging",
         "created_at": "2020-07-09T20:11:00.000Z",
         "votes": 100,
-       "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+       "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=710"
       }
     }
   },
   "DELETE /api/comments/:comment_id": {
     "description": "deletes a specific comment from the comments table",
     "exampleResponse": "Response status is 204, so no content should be expected in response body"
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "mr_whittington",
+          "name": "rich",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        },
+        {
+          "username": "handle",
+          "name": "chad",
+          "avatar_url" : "https://avatars2.githubusercontent.com/u/24604688?s=465&v=4"
+        }]
+    }
   }
 }
