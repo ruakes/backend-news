@@ -1,6 +1,6 @@
 const topics = require('../db/data/test-data/topics.js')
 
-const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle, insertNewComment, updateArticleVotes } = require('../models/endpoints.model.js')
+const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle, insertNewComment, updateArticleVotes, removeExistingComment } = require('../models/endpoints.model.js')
 const endpoints = require("../endpoints.json")
 
 exports.getAllTopics = (req, res, next) => {
@@ -90,6 +90,17 @@ exports.patchArticleVotes = (req, res, next) => {
     .then((results) => {
         const updatedArticle = results[0]
         res.status(200).send({updatedArticle})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.deleteCommentById = (req, res, next) => {
+    const {comment_id} = req.params;
+    removeExistingComment(comment_id)
+    .then(() => {
+        res.status(204).send()
     })
     .catch((err) => {
         next(err)
