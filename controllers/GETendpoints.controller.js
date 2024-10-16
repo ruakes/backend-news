@@ -1,6 +1,6 @@
 const topics = require('../db/data/test-data/topics.js')
 
-const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle } = require('../models/endpoints.model.js')
+const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle } = require('../models/GETendpoints.model.js')
 const endpoints = require("../endpoints.json")
 
 exports.getAllTopics = (req, res, next) => {

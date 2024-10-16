@@ -2,7 +2,7 @@ const request = require('supertest')
 const app = require('../app.js')
 const db = require('../db/connection.js')
 const seed = require('../db/seeds/seed.js')
-const data = require('../db/data/test-data')
+const data = require('../db/data/test-data/index.js')
 const endpointsObject = require("../endpoints.json")
 
 
@@ -100,7 +100,7 @@ describe("'/api/articles' endpoint", () => {
         })
     })
     describe("GET all data from '/api/articles' endpoint", () => {
-        test("GET /api/articles returns an array of objecys with a length of 13, each object contains specific properties, excluding 'body'", () => {
+        test("GET /api/articles returns 200 and an array of objects", () => {
             return request(app)
             .get('/api/articles')
             .expect(200)
@@ -121,7 +121,7 @@ describe("'/api/articles' endpoint", () => {
                 });
             })
         })
-        test("GET /api/articles returns an array of objects in descending date order i.e. most recent first", () => {
+        test("GET /api/articles returns 200 and array of objects in descending date order i.e. most recent first", () => {
             return request(app)
             .get('/api/articles')
             .expect(200)
@@ -132,7 +132,7 @@ describe("'/api/articles' endpoint", () => {
         })
     })
     describe("GET all comments for a specific article from '/api/articles/:article_id/comments' endpoint", () => {
-        test("GET correct length array with comments listed in descending time order. Comments should be objects with certain properties", () => {
+        test("GET returns 200 and array of comments", () => {
             return request(app)
             .get('/api/articles/9/comments')
             .expect(200)
