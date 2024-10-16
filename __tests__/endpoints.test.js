@@ -120,7 +120,7 @@ describe("GET all data from '/api/articles/:article_id' endpoint", () => {
         .get('/api/articles/101')
         .expect(404)
         .then(({body}) => {
-            expect(body.msg).toBe('Article not found')
+            expect(body.msg).toBe('Not found')
         })
     })
     test("GET /api/articles/:article_id returns 400 if invalid datatype passed as an ID", () => {
@@ -177,16 +177,14 @@ describe("GET '/api/articles/:article_id/comments' endpoint", () => {
         .get('/api/articles/101/comments')
         .expect(404)
         .then(({body}) => {
-            expect(body.msg).toBe('Article not found')
+            expect(body.msg).toBe('Not found')
         })
     })
 })
 
 describe("POST '/api/articles/:article_id/comments' endpoint", () => {
     test("POST a new comment returns 201", () => {
-
         const commentBody = {username: "lurker", body: "What a fantastic insight!"};
-        const postedComment = {username: "lurker", body: "What a fantastic insight!"};
 
         return request(app)
         .post('/api/articles/9/comments')
@@ -203,6 +201,50 @@ describe("POST '/api/articles/:article_id/comments' endpoint", () => {
             });
             expect(body.addedComment.author).toBe("lurker");
             expect(body.addedComment.body).toBe("What a fantastic insight!")
+        })
+    })
+    test("POST request to non-valid article_id returns 400", () => {
+        const commentBody = {username: "lurker", body: "What a fantastic insight!"};
+
+        return request(app)
+        .post('/api/articles/ruairi/comments')
+        .send(commentBody)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+    test("POST /api/articles/:article_id/comments returns 404 for bad article id", () => {
+        const commentBody = {username: "lurker", body: "What a fantastic insight!"};
+
+        return request(app)
+        .post('/api/articles/101/comments')
+        .send(commentBody)
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Not found')
+        })
+    })
+    test("POST /api/articles/:article_id/comments returns 404 if user not found", () => {
+        const commentBody = {username: "billy_goat", body: "What a fantastic insight!"};
+
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(commentBody)
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Not found')
+        })
+    })
+    test("POST /api/articles/:article_id/comments returns 400 if no comment body", () => {
+        const commentBody = {username: "lurker"};
+
+        return request(app)
+        .post('/api/articles/101/comments')
+        .send(commentBody)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('No comment body provided')
         })
     })
 })

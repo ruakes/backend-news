@@ -25,7 +25,7 @@ exports.selectArticleById = (article_id) => {
         WHERE article_id = $1;`, [article_id])
         .then(({rows}) => {
             if(rows.length === 0){
-                return Promise.reject({status: 404, msg: 'Article not found'})
+                return Promise.reject({status: 404, msg: 'Not found'})
             }
             return rows[0];
         })
@@ -42,6 +42,8 @@ exports.selectAllCommentsOnArticle = (article_id) => {
 }
 
 exports.insertNewComment = (author, body, article_id) => {
+    if (body === undefined){
+        return Promise.reject({status: 400, msg: 'No comment body provided'})}
     const formattedComment = format(`INSERT INTO comments 
         (author, body, article_id) 
         VALUES %L 
