@@ -248,3 +248,81 @@ describe("POST '/api/articles/:article_id/comments' endpoint", () => {
         })
     })
 })
+
+describe("PATCH '/api/articles/:article_id' endpoint", () => {
+    test("PATCHing an article to increase votes returns 200", () => {
+        const voteInc = {inc_votes: 5};
+
+        return request(app)
+        .patch('/api/articles/13')
+        .send(voteInc)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.updatedArticle).toMatchObject({
+                article_id: expect.any(Number),
+                title:  expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                article_img_url: expect.any(String)
+            })
+            expect(body.updatedArticle.votes).toBe(5)
+        })
+    })
+    test("PATCHing an article to decrease votes returns 200", () => {
+        const voteInc = {inc_votes: -90};
+
+        return request(app)
+        .patch('/api/articles/1')
+        .send(voteInc)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.updatedArticle).toMatchObject({
+                article_id: expect.any(Number),
+                title:  expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                article_img_url: expect.any(String)
+            })
+            expect(body.updatedArticle.votes).toBe(10)
+        })
+    })
+    test("PATCH request to non-valid article_id returns 400", () => {
+        const voteInc = {inc_votes: -90};
+
+        return request(app)
+        .patch('/api/articles/ruairi')
+        .send(voteInc)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+    test("PATCH request to non-existent article_id returns 404", () => {
+        const voteInc = {inc_votes: -90};
+
+        return request(app)
+        .patch('/api/articles/999')
+        .send(voteInc)
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Not found')
+        })
+    })
+    test("PATCH request with invalid vote increment returns 400", () => {
+        const voteInc = {inc_votes: "voteUp"};
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(voteInc)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+})
