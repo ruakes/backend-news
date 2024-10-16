@@ -350,3 +350,22 @@ describe("DELETE '/api/comments/:comment_id' endpoint", () => {
         })
     })
 })
+
+describe("GET '/api/users' endpoint", () => {
+    test("GET request returns 200 and array of users", () => {
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.users).toHaveLength(4)
+            expect(Array.isArray(body.users)).toBe(true)
+            body.users.forEach(user => {
+                expect(user).toMatchObject({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String)
+                })
+            })
+        })
+    })
+})
