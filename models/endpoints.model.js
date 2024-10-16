@@ -7,14 +7,21 @@ exports.selectAllTopics = () => {
         return rows;
     })
 }
+// title, topic, author, body, created_at, votes, article_img_url
+exports.selectAllArticles = (sort_by = 'created_at', order = 'desc') => {
+    const sort_columns = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'];
+    const order_options = ['asc', 'desc'];
 
-exports.selectAllArticles = () => {
-    return db.query(`
-        SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id)::INT AS comment_count
+    if(!sort_columns.includes(sort_by) || !order_options.includes(order)) {
+        return Promise.reject({status: 404, msg: 'Query option not found'})
+    }
+    let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id)::INT AS comment_count
         FROM articles
         LEFT JOIN comments ON articles.article_id = comments.article_id
-        GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC;`)
+        GROUP BY articles.article_id`;
+
+    queryStr += ` ORDER BY ${sort_by} ${order.toUpperCase()};` 
+    return db.query(queryStr)
     .then(({rows}) => {
         return rows;
     })

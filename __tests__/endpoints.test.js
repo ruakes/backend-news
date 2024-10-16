@@ -95,6 +95,40 @@ describe("'/api/articles' endpoint", () => {
             })
         })
     })
+    describe("GET articles with sort_by query passed", () => {
+        test("GET /api/articles?sort_by=author returns 200, sorted articles in descending order", () => {
+            return request(app)
+            .get('/api/articles?sort_by=author')
+            .expect(200)
+            .then(({body}) => { 
+                expect(body.articles).toBeSortedBy("author", { descending: true });
+            })
+        })
+        test("GET /api/articles?order=asc returns 200, articles in ascending order", () => {
+            return request(app)
+            .get('/api/articles?order=asc')
+            .expect(200)
+            .then(({body}) => { 
+                expect(body.articles).toBeSortedBy("created_at");
+            })
+        })
+        test("GET /api/article?sort_by=not_a_column returns 404", () => {
+            return request(app)
+            .get('/api/articles?sort_by=not_a_column')
+            .expect(404)
+            .then(({body}) => { 
+                expect(body.msg).toBe("Query option not found");
+            })
+        })
+        test("GET /api/article?order=not_an_option returns 404", () => {
+            return request(app)
+            .get('/api/articles?order=not_an_option')
+            .expect(404)
+            .then(({body}) => { 
+                expect(body.msg).toBe("Query option not found");
+            })
+        })
+    })
 })
 
 describe("GET all data from '/api/articles/:article_id' endpoint", () => {
