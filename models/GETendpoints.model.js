@@ -40,3 +40,17 @@ exports.selectAllCommentsOnArticle = (article_id) => {
             return rows;
         })
 }
+
+exports.insertNewComment = (author, body, article_id) => {
+    const formattedComment = format(`INSERT INTO comments 
+        (author, body, article_id) 
+        VALUES %L 
+        RETURNING *;`, [[author, body, article_id]])
+
+    return db.query(formattedComment)
+    .then(({rows}) => {
+        return rows[0]
+    })
+
+
+}

@@ -63,42 +63,6 @@ describe("GET '/api' ", () => {
 })
 
 describe("'/api/articles' endpoint", () => {
-    describe("GET all data from '/api/articles/:article_id' endpoint", () => {
-        test("GET /api/articles/:article_id returns 200", () => {
-            return request(app)
-            .get('/api/articles/1')
-            .expect(200)
-            .then(({body}) => {
-                expect(body.article).toMatchObject({
-                    article_id: expect.any(Number),
-                    title:  expect.any(String),
-                    topic: expect.any(String),
-                    author: expect.any(String),
-                    body: expect.any(String),
-                    created_at: expect.any(String),
-                    votes: expect.any(Number),
-                    article_img_url: expect.any(String)
-                })
-            })
-        })
-        test("GET /api/articles/:article_id returns 404 if not found", () => {
-            return request(app)
-            .get('/api/articles/101')
-            .expect(404)
-            .then(({body}) => {
-                expect(body.msg).toBe('Article not found')
-            })
-        })
-        test("GET /api/articles/:article_id returns 400 if invalid datatype passed as an ID", () => {
-            return request(app)
-            .get('/api/articles/ruairi')
-            .expect(400)
-            .then(({body}) => {
-                expect(body.msg).toBe('Article ID submitted is invalid datatype')
-                expect(body.msg).toBe('Article ID submitted is invalid datatype')
-            })
-        })
-    })
     describe("GET all data from '/api/articles' endpoint", () => {
         test("GET /api/articles returns 200 and an array of objects", () => {
             return request(app)
@@ -131,52 +95,114 @@ describe("'/api/articles' endpoint", () => {
             })
         })
     })
-    describe("GET '/api/articles/:article_id/comments' endpoint", () => {
-        test("GET returns 200 and array of comments", () => {
-            return request(app)
-            .get('/api/articles/9/comments')
-            .expect(200)
-            .then(({body}) => {
-                expect(Array.isArray(body.comments)).toBe(true)
-                expect(body.comments).toHaveLength(2)
-                body.comments.forEach(comment => {
-                    expect(comment).toMatchObject({
-                        comment_id: expect.any(Number),
-                        votes: expect.any(Number),
-                        article_id: expect.any(Number),
-                        body: expect.any(String),
-                        created_at: expect.any(String),
-                        author: expect.any(String),
-                    });
+})
+
+describe("GET all data from '/api/articles/:article_id' endpoint", () => {
+    test("GET /api/articles/:article_id returns 200", () => {
+        return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.article).toMatchObject({
+                article_id: expect.any(Number),
+                title:  expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                article_img_url: expect.any(String)
+            })
+        })
+    })
+    test("GET /api/articles/:article_id returns 404 if not found", () => {
+        return request(app)
+        .get('/api/articles/101')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Article not found')
+        })
+    })
+    test("GET /api/articles/:article_id returns 400 if invalid datatype passed as an ID", () => {
+        return request(app)
+        .get('/api/articles/ruairi')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+})
+
+describe("GET '/api/articles/:article_id/comments' endpoint", () => {
+    test("GET returns 200 and array of comments", () => {
+        return request(app)
+        .get('/api/articles/9/comments')
+        .expect(200)
+        .then(({body}) => {
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments).toHaveLength(2)
+            body.comments.forEach(comment => {
+                expect(comment).toMatchObject({
+                    comment_id: expect.any(Number),
+                    votes: expect.any(Number),
+                    article_id: expect.any(Number),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    author: expect.any(String),
                 });
-                expect(body.comments[0].comment_id).toBe(1)
-                expect(body.comments[1].comment_id).toBe(17)
-            })
+            });
+            expect(body.comments[0].comment_id).toBe(1)
+            expect(body.comments[1].comment_id).toBe(17)
         })
-        test("GET request to article with no comments returns 200 and empty array", () => {
-            return request(app)
-            .get('/api/articles/8/comments')
-            .expect(200)
-            .then(({body}) => {
-                expect(Array.isArray(body.comments)).toBe(true)
-                expect(body.comments).toHaveLength(0)
-            })
+    })
+    test("GET request to article with no comments returns 200 and empty array", () => {
+        return request(app)
+        .get('/api/articles/8/comments')
+        .expect(200)
+        .then(({body}) => {
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments).toHaveLength(0)
         })
-        test("GET request to non-valid article_id returns 400 and message string detailing the error", () => {
-            return request(app)
-            .get('/api/articles/ruairi/comments')
-            .expect(400)
-            .then(({body}) => {
-                expect(body.msg).toBe('Article ID submitted is invalid datatype')
-            })
+    })
+    test("GET request to non-valid article_id returns 400", () => {
+        return request(app)
+        .get('/api/articles/ruairi/comments')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
         })
-        test("GET /api/articles/:article_id/comments returns 404 if not found", () => {
-            return request(app)
-            .get('/api/articles/101/comments')
-            .expect(404)
-            .then(({body}) => {
-                expect(body.msg).toBe('Article not found')
-            })
+    })
+    test("GET /api/articles/:article_id/comments returns 404 if not found", () => {
+        return request(app)
+        .get('/api/articles/101/comments')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Article not found')
+        })
+    })
+})
+
+describe("POST '/api/articles/:article_id/comments' endpoint", () => {
+    test("POST a new comment returns 201", () => {
+
+        const commentBody = {username: "lurker", body: "What a fantastic insight!"};
+        const postedComment = {username: "lurker", body: "What a fantastic insight!"};
+
+        return request(app)
+        .post('/api/articles/9/comments')
+        .send(commentBody)
+        .expect(201)
+        .then(({body}) => {
+            expect(body.addedComment).toMatchObject({
+                comment_id: expect.any(Number),
+                votes: expect.any(Number),
+                article_id: expect.any(Number),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                author: expect.any(String),
+            });
+            expect(body.addedComment.author).toBe("lurker");
+            expect(body.addedComment.body).toBe("What a fantastic insight!")
         })
     })
 })
