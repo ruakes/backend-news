@@ -1,6 +1,6 @@
 const topics = require('../db/data/test-data/topics.js')
 
-const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle } = require('../models/endpoints.model.js')
+const { selectAllTopics, selectArticleById, selectAllArticles, selectAllCommentsOnArticle, insertNewComment } = require('../models/GETendpoints.model.js')
 const endpoints = require("../endpoints.json")
 
 exports.getAllTopics = (req, res, next) => {
@@ -24,7 +24,6 @@ exports.getArticlesById = (req, res, next) => {
         res.status(200).send({article})
     })
     .catch((err) => {
-        
         next(err)
     })
 }
@@ -51,6 +50,27 @@ exports.getAllCommentsOnArticle = (req, res, next) => {
     .then((results) => {
         const comments = results[0]
         res.status(200).send({comments})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.postCommentToArticle = (req, res, next) => {
+    const commentAuthor = req.body.username
+    const commentBody = req.body.body;
+    const {article_id} = req.params
+
+    const promises = [insertNewComment(commentAuthor, commentBody, article_id)]
+
+    if (article_id){
+        promises.push(selectArticleById(article_id))
+    }
+
+    Promise.all(promises)
+    .then((results) => {
+        const addedComment = results[0]
+        res.status(201).send({addedComment})
     })
     .catch((err) => {
         next(err)
