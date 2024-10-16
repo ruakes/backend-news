@@ -20,7 +20,8 @@ exports.selectAllArticles = (sort_by = 'created_at', order = 'desc') => {
         LEFT JOIN comments ON articles.article_id = comments.article_id
         GROUP BY articles.article_id`;
 
-    queryStr += ` ORDER BY ${sort_by} ${order.toUpperCase()};` 
+    queryStr += format(` ORDER BY %s %s;`, sort_by, order.toUpperCase())
+    
     return db.query(queryStr)
     .then(({rows}) => {
         return rows;
