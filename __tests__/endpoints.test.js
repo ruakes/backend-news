@@ -131,7 +131,7 @@ describe("'/api/articles' endpoint", () => {
             })
         })
     })
-    describe("GET all comments for a specific article from '/api/articles/:article_id/comments' endpoint", () => {
+    describe("GET '/api/articles/:article_id/comments' endpoint", () => {
         test("GET returns 200 and array of comments", () => {
             return request(app)
             .get('/api/articles/9/comments')
