@@ -59,6 +59,7 @@
   },
   "POST /api/articles/:article_id/comments": {
     "description": "Posts new comment to an article and returns that comment",
+    "exampleRequestBody": {"username": "user1", "body": "Great comment here"},
     "exampleResponse": {
       "addedComment": {
         "comment_id": 19,
@@ -67,6 +68,22 @@
         "author": "lurker",
         "votes": 0,
         "created_at": "2024-10-16T11:01:46.220Z"
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates the vote count for a specific article given as a parameter in the PATCH request",
+    "exampleRequestBody": {"inc_votes": 5},
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": "2020-07-09T20:11:00.000Z",
+        "votes": 100,
+       "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
   }
