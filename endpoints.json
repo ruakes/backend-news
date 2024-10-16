@@ -86,5 +86,9 @@
        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a specific comment from the comments table",
+    "exampleResponse": "Response status is 204, so no content should be expected in response body"
   }
 }

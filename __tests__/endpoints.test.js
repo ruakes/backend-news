@@ -326,3 +326,27 @@ describe("PATCH '/api/articles/:article_id' endpoint", () => {
         })
     })
 })
+
+describe("DELETE '/api/comments/:comment_id' endpoint", () => {
+    test("Deleting a comment returns 204", () => {
+        return request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+    })
+    test("DELETE request to non-valid comment_id returns 400", () => {
+        return request(app)
+        .delete('/api/comments/NOCOMMENT')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+    test("PATCH request to non-existent article_id returns 404", () => {
+        return request(app)
+        .delete('/api/comments/101101')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Not found')
+        })
+    })
+})
