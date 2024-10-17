@@ -209,6 +209,15 @@ describe("GET all data from '/api/articles/:article_id' endpoint", () => {
             expect(body.msg).toBe('Bad request')
         })
     })
+    test("GET /api/articles/:article_id returns 200, response body includes count of comments on article", () => {
+        return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.article).toHaveProperty('comment_count')
+            expect(body.article.comment_count).toBe(11)
+        })
+    })
 })
 
 describe("GET '/api/articles/:article_id/comments' endpoint", () => {
