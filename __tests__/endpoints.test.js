@@ -130,7 +130,7 @@ describe("'/api/articles' endpoint", () => {
         })
     })
     describe("GET relevant articles with filtered query on topic", () => {
-        test("GET /api/articles?topic=cats returns 200, on single match topic", () => {
+        test("GET /api/articles takes a topic query and returns articles on that topic, on single match topic", () => {
             return request(app)
             .get('/api/articles?topic=cats')
             .expect(200)
@@ -142,7 +142,7 @@ describe("'/api/articles' endpoint", () => {
                 })
             })
         })
-        test("GET /api/articles?topic=cats returns 200, on multi-match topic", () => {
+        test("GET /api/articles takes a topic query and returns articles on that topic, on multi-match topic", () => {
             return request(app)
             .get('/api/articles?topic=mitch')
             .expect(200)
@@ -154,22 +154,34 @@ describe("'/api/articles' endpoint", () => {
                 })
             })
         })
-        test("GET /api/articles?topic=paper returns 200, on zero-match topic", () => {
+        test("GET /api/articles takes a topic query and returns 200, on zero-match topic", () => {
             return request(app)
             .get('/api/articles?topic=paper')
             .expect(200)
             .then(({body}) => {
-                expect(Array.isArray(body.articles)).toBe(true)
                 expect(body.articles).toHaveLength(0)
                 expect(body.articles).toEqual([])
             })
         })
-        test("GET /api/article?topic=not_a_topic returns 404", () => {
+        test("GET /api/article takes an invalid topic query and returns 404", () => {
             return request(app)
             .get('/api/articles?topic=not_a_topic')
             .expect(404)
             .then(({body}) => { 
                 expect(body.msg).toBe("Topic not found");
+            })
+        })
+        test("GET /api/articles takes a multiple queries and returns matching articles", () => {
+            return request(app)
+            .get('/api/articles?topic=mitch&sort_by=votes&order=asc')
+            .expect(200)
+            .then(({body}) => {
+                expect(Array.isArray(body.articles)).toBe(true);
+                expect(body.articles).toHaveLength(12);
+                expect(body.articles).toBeSortedBy("votes");
+                body.articles.forEach(article => {
+                    expect(article.topic).toBe('mitch')
+                });
             })
         })
     })
