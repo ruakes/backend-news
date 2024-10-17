@@ -1,5 +1,6 @@
 const db = require('../db/connection.js')
-const format = require('pg-format')
+const format = require('pg-format');
+const articles = require('../db/data/development-data/articles.js');
 
 exports.selectAllTopics = () => {
     return db.query(`SELECT * FROM topics;`)
@@ -7,8 +8,8 @@ exports.selectAllTopics = () => {
         return rows;
     })
 }
-// title, topic, author, body, created_at, votes, article_img_url
-exports.selectAllArticles = (sort_by = 'created_at', order = 'desc') => {
+
+exports.selectAllArticles = (sort_by = 'created_at', order = 'desc', topic) => {
     const sort_columns = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'];
     const order_options = ['asc', 'desc'];
 
@@ -17,12 +18,30 @@ exports.selectAllArticles = (sort_by = 'created_at', order = 'desc') => {
     }
     let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id)::INT AS comment_count
         FROM articles
-        LEFT JOIN comments ON articles.article_id = comments.article_id
-        GROUP BY articles.article_id`;
+        LEFT JOIN comments ON articles.article_id = comments.article_id`;
 
-    queryStr += format(` ORDER BY %s %s;`, sort_by, order.toUpperCase())
-    
-    return db.query(queryStr)
+    let queryVals = [];
+
+    if(topic) {
+        return db.query(`SELECT * FROM topics WHERE slug = $1`, [topic])
+        .then(({rows}) => {
+            if(rows.length === 0){
+            return Promise.reject({status: 404, msg: 'Topic not found'})
+            }
+            queryStr += ` WHERE topic = $1`
+            queryVals.push(topic)
+            queryStr += format(` GROUP BY articles.article_id ORDER BY %I %s;`, sort_by, order.toUpperCase())
+            return db.query(queryStr, queryVals)
+            .then(({rows}) => {
+       
+            return rows;
+            })
+        })
+    }
+
+    queryStr += format(` GROUP BY articles.article_id ORDER BY %I %s;`, sort_by, order.toUpperCase())
+
+    return db.query(queryStr, queryVals)
     .then(({rows}) => {
         return rows;
     })
