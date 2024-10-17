@@ -1,10 +1,4 @@
-const express = require("express");
+const app = require("./app.js");
+const { PORT = 9090 } = process.env;
 
-const app = express();
-
-app.listen(8080, (err)=>{
-    if(err){
-        console.log(err)
-    }
-    console.log("Listening on 8080")
-})
+app.listen(PORT, () => console.log(`Listening on ${PORT}...`));
