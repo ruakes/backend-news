@@ -62,7 +62,7 @@ describe("GET '/api' ", () => {
     })
 })
 
-describe.only("'/api/articles' endpoint", () => {
+describe("'/api/articles' endpoint", () => {
     describe("GET all data from '/api/articles' endpoint", () => {
         test("GET /api/articles returns 200 and an array of objects", () => {
             return request(app)
