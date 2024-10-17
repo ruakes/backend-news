@@ -129,6 +129,50 @@ describe("'/api/articles' endpoint", () => {
             })
         })
     })
+    describe("GET relevant articles with filtered query on topic", () => {
+        test("GET /api/articles?topic=cats returns 200, on single match topic", () => {
+            return request(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then(({body}) => {
+                expect(Array.isArray(body.articles)).toBe(true)
+                expect(body.articles).toHaveLength(1)
+                body.articles.forEach(article => {
+                    expect(article.topic).toBe('cats')
+                })
+            })
+        })
+        test("GET /api/articles?topic=cats returns 200, on multi-match topic", () => {
+            return request(app)
+            .get('/api/articles?topic=mitch')
+            .expect(200)
+            .then(({body}) => {
+                expect(Array.isArray(body.articles)).toBe(true)
+                expect(body.articles).toHaveLength(12)
+                body.articles.forEach(article => {
+                    expect(article.topic).toBe('mitch')
+                })
+            })
+        })
+        test("GET /api/articles?topic=paper returns 200, on zero-match topic", () => {
+            return request(app)
+            .get('/api/articles?topic=paper')
+            .expect(200)
+            .then(({body}) => {
+                expect(Array.isArray(body.articles)).toBe(true)
+                expect(body.articles).toHaveLength(0)
+                expect(body.articles).toEqual([])
+            })
+        })
+        test("GET /api/article?topic=not_a_topic returns 404", () => {
+            return request(app)
+            .get('/api/articles?topic=not_a_topic')
+            .expect(404)
+            .then(({body}) => { 
+                expect(body.msg).toBe("Topic not found");
+            })
+        })
+    })
 })
 
 describe("GET all data from '/api/articles/:article_id' endpoint", () => {
