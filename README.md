@@ -16,8 +16,8 @@ The backend enables users to access a variety of API endpoints related to articl
 4. Inside each .env file, add **PGDATABASE=<databaseName>**, for the relevant environment. These can be found under **/db/setup.sql** 
 5. Double check that the created .env files are <ins>.gitignored.</ins>
 6. Seed the local databases:
-    ``` npm run setup-dbs
-        npm run seed```
+    ```npm run setup-dbs```
+    ```npm run seed```
 
 ## Minimum version requirements
 **Node.js :** *v22.6.0*
