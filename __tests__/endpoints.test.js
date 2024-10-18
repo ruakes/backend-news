@@ -468,3 +468,27 @@ describe("GET '/api/users' endpoint", () => {
         })
     })
 })
+
+describe("GET '/api/users/:username' endpoint", () => {
+    test("GET request returns 200 and object", () => {
+        return request(app)
+        .get('/api/users/butter_bridge')
+        .expect(200)
+        .then(({body}) => {
+            expect(body.user).toMatchObject({
+                username: expect.any(String),
+                avatar_url: expect.any(String),
+                name: expect.any(String)
+            })
+            expect(body.user.name).toBe('jonny')
+        })
+    })
+    test("GET returns 404 if not found", () => {
+        return request(app)
+        .get('/api/users/101')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Not found')
+        })
+    })
+})
