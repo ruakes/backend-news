@@ -1,6 +1,7 @@
 const db = require('../db/connection.js')
 const format = require('pg-format');
 const articles = require('../db/data/development-data/articles.js');
+const { user } = require('pg/lib/defaults.js');
 
 exports.selectAllTopics = () => {
     return db.query(`SELECT * FROM topics;`)
@@ -116,5 +117,15 @@ exports.selectAllUsers = () => {
     return db.query(`SELECT * FROM users;`)
     .then(({rows}) => {
         return rows;
+    })
+}
+
+exports.selectUserByUsername = (username) => {
+    return db.query(`SELECT * FROM users WHERE username = $1`, [username])
+    .then(({rows}) => {
+        if(rows.length === 0){
+            return Promise.reject({status: 404, msg: 'Not found'})
+        }
+        return rows[0];
     })
 }
