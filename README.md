@@ -21,7 +21,7 @@ The backend enables users to access a variety of API endpoints related to articl
 
 ## Minimum version requirements
 **Node.js :** *v22.6.0*
-**Postgres:** *14.13*
+**Postgres :** *14.13*
 --- 
 
 This portfolio project was created as part of a Digital Skills Bootcamp in Software Engineering provided by [Northcoders](https://northcoders.com/)
