@@ -1,6 +1,6 @@
 # Backend News API
 
-- [Backend project is hosted on Render] (https://backend-news-tssw.onrender.com/api)
+- [Backend project is hosted on Render](https://backend-news-tssw.onrender.com/api)
 
 ## Project summary
 The backend service for a news website written with express, tested using jest and supertest. PSQL used to database.
