@@ -10,7 +10,7 @@ exports.selectAllTopics = () => {
 }
 
 exports.selectAllArticles = (sort_by = 'created_at', order = 'desc', topic) => {
-    const sort_columns = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'];
+    const sort_columns = ['title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url', 'comment_count'];
     const order_options = ['asc', 'desc'];
 
     if(!sort_columns.includes(sort_by) || !order_options.includes(order)) {
