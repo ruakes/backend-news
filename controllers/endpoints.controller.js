@@ -129,3 +129,17 @@ exports.getUsersByUsername = (req, res, next) => {
         next(err)
     })
 }
+
+exports.patchCommentVotes = (req, res, next) => {
+    // const vote_inc = req.body.inc_votes;
+    // const {comment_id} = req.params;
+    // const promises = [//updateCommentVotes(vote_inc, article_id)];
+
+
+    // .then((updatedComment) => {
+    //     res.status(200).send({updatedComment})
+    // })
+    // .catch((err) => {
+    //     next(err)
+    // })
+}

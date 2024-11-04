@@ -492,3 +492,81 @@ describe("GET '/api/users/:username' endpoint", () => {
         })
     })
 })
+
+describe("PATCH '/api/comments/:comment_id' endpoint", () => {
+    test("PATCHing a comment to increase votes returns 200", () => {
+        const voteInc = {inc_votes: 5};
+
+        return request(app)
+        .patch('/api/comments/13')
+        .send(voteInc)
+        .expect(200)
+        .then(({body}) => {
+            expect(body.updatedComment).toMatchObject({
+                // article_id: expect.any(Number),
+                // title:  expect.any(String),
+                // topic: expect.any(String),
+                // author: expect.any(String),
+                // body: expect.any(String),
+                // created_at: expect.any(String),
+                // votes: expect.any(Number),
+                // article_img_url: expect.any(String)
+            })
+            expect(body.updatedComment.votes)//.toBe(5)
+        })
+    })
+    // test("PATCHing a comment to decrease votes returns 200", () => {
+    //     const voteInc = {inc_votes: -90};
+
+    //     return request(app)
+    //     .patch('/api/comments/1')
+    //     .send(voteInc)
+    //     .expect(200)
+    //     .then(({body}) => {
+    //         expect(body.updatedArticle).toMatchObject({
+    //             article_id: expect.any(Number),
+    //             title:  expect.any(String),
+    //             topic: expect.any(String),
+    //             author: expect.any(String),
+    //             body: expect.any(String),
+    //             created_at: expect.any(String),
+    //             votes: expect.any(Number),
+    //             article_img_url: expect.any(String)
+    //         })
+    //         expect(body.updatedArticle.votes).toBe(10)
+    //     })
+    // })
+    test("PATCH request to non-valid comment_id returns 400", () => {
+        const voteInc = {inc_votes: -90};
+
+        return request(app)
+        .patch('/api/comments/ruairi')
+        .send(voteInc)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+    test("PATCH request to non-existent comment_id returns 404", () => {
+        const voteInc = {inc_votes: -90};
+
+        return request(app)
+        .patch('/api/comments/999')
+        .send(voteInc)
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('Not found')
+        })
+    })
+    test("PATCH request with invalid vote increment returns 400", () => {
+        const voteInc = {inc_votes: "voteUp"};
+
+        return request(app)
+        .patch('/api/comments/3')
+        .send(voteInc)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+})
